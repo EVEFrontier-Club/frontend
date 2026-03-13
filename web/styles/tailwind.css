@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+@theme {
+  /* === COLORS === */
+  --color-background: #0b0e14; /* глубокий космос */
+  --color-surface: #11141c;
+  --color-surface-light: #1a1f2b;
+
+  --color-primary: #4cc9f0; /* неоновый голубой */
+  --color-primary-light: #72e3ff;
+  --color-primary-dark: #2a9ec4;
+
+  --color-accent: #9d4bff; /* фиолетовый акцент */
+  --color-accent-light: #c28aff;
+
+  --color-border: #1f2430;
+  --color-border-light: #2a3142;
+
+  --color-text: #e6e9ef;
+  --color-text-muted: #9aa0b1;
+
+  /* === TYPOGRAPHY === */
+  --font-sans: "Inter", "Roboto", "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* === RADIUS === */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --radius-xl: 22px;
+
+  /* === SHADOWS === */
+  --shadow-card: 0 0 20px rgba(76, 201, 240, 0.08);
+  --shadow-glow: 0 0 25px rgba(76, 201, 240, 0.35);
+
+  /* === GRADIENTS === */
+  --gradient-primary: linear-gradient(135deg, #4cc9f0 0%, #4361ee 100%);
+  --gradient-accent: linear-gradient(135deg, #9d4bff 0%, #4cc9f0 100%);
+
+  /* === SPACING === */
+  --spacing-section: 4rem;
+  --spacing-card: 1.5rem;
+
+  /* === TRANSITIONS === */
+  --transition-fast: 150ms ease;
+  --transition-medium: 250ms ease;
+}
+
+@layer base {
+  body {
+    background: var(--color-background);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  a {
+    color: var(--color-primary);
+    transition: color var(--transition-fast);
+  }
+
+  a:hover {
+    color: var(--color-primary-light);
+  }
+}
+
+@layer components {
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-card);
+    box-shadow: var(--shadow-card);
+    transition:
+      box-shadow var(--transition-medium),
+      transform var(--transition-medium);
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-2px);
+  }
+
+  .btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    transition: opacity var(--transition-fast);
+  }
+
+  .btn-primary:hover {
+    opacity: 0.85;
+  }
+
+  .section {
+    padding-top: var(--spacing-section);
+    padding-bottom: var(--spacing-section);
+  }
+}
+
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 12px rgba(76, 201, 240, 0.6);
+  }
+
+  .border-glow {
+    box-shadow: 0 0 12px rgba(76, 201, 240, 0.4);
+  }
+
+  .logo-glow {
+    filter: drop-shadow(0 0 12px rgba(76, 201, 240, 0.6));
+  }
+}
