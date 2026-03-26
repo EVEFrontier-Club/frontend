@@ -29,8 +29,7 @@ void main() {
       title: 'EVE Frontier Club',
       styles: [
         // Special import rule to include to another css file.
-        css.import('styles/tailwind.css'),
-        css.import('https://fonts.googleapis.com/css?family=Roboto'),
+
         // Each style rule takes a valid css selector and a set of styles.
         // Styles are defined using type-safe css bindings and can be freely chained and nested.
         css('html, body').styles(
@@ -49,6 +48,7 @@ void main() {
         // The generated flutter manifest and bootstrap script.
         link(rel: 'manifest', href: 'manifest.json'),
         script(src: "flutter_bootstrap.js", async: true),
+        link(href: 'styles.css', rel: 'stylesheet'),
       ],
       body: App(),
     ),
