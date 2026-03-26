@@ -1,0 +1,39 @@
+[Unit]
+Description=EVE Frontier Club Frontend
+After=network.target
+
+[Service]
+Type=simple
+User=evefrontier
+WorkingDirectory=/var/www/evefrontier-club
+Environment="PATH=/usr/lib/dart/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+# Start command - runs Jaspr in server mode
+ExecStart=/usr/lib/dart/bin/dart bin/main.dart
+
+# Restart policy - restart on failure
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=evefrontier-club
+
+# Resource limits for low-end server
+# Limit to 256MB memory to prevent OOM on 1GB RAM system
+MemoryMax=256M
+CPUQuota=80%
+
+# Process management
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=5
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/www/evefrontier-club /var/log/evefrontier-club
+
+[Install]
+WantedBy=multi-user.target

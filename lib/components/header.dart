@@ -2,8 +2,6 @@ import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 import 'package:jaspr_router/jaspr_router.dart';
 
-import '../constants/theme.dart';
-
 class Header extends StatelessComponent {
   const Header({super.key});
 
@@ -12,14 +10,30 @@ class Header extends StatelessComponent {
     var activePath = context.url;
 
     return header([
-      nav([
-        for (var route in [
-          (label: 'Home', path: '/'),
-          (label: 'About', path: '/about'),
-        ])
-          div(classes: activePath == route.path ? 'active' : null, [
-            Link(to: route.path, child: .text(route.label)),
-          ]),
+      nav(classes: 'flex items-center justify-between w-full', [
+        // Logo
+        Link(
+          to: '/',
+          child: img(
+            src: 'images/evefrontier-club.png',
+            alt: 'EVE Frontier Club',
+            classes: 'h-12 hover:opacity-80 transition-opacity',
+            width: 48,
+            height: 48,
+          ),
+        ),
+
+        // Navigation links
+        div(classes: 'flex gap-0', [
+          for (var route in [
+            (label: 'Home', path: '/'),
+            (label: 'Leaderboard', path: '/leaderboard'),
+            (label: 'About', path: '/about'),
+          ])
+            div(classes: activePath == route.path ? 'nav-link active' : 'nav-link', [
+              Link(to: route.path, child: .text(route.label)),
+            ]),
+        ]),
       ]),
     ]);
   }
@@ -29,44 +43,55 @@ class Header extends StatelessComponent {
     css('header', [
       css('&').styles(
         display: .flex,
-        padding: .all(1.em),
+        padding: .symmetric(horizontal: 2.rem, vertical: 1.rem),
         justifyContent: .center,
+        backgroundColor: const Color('#0b0e14'),
       ),
-      css('nav', [
-        css('&').styles(
-          display: .flex,
-          height: 3.em,
-          radius: .all(.circular(10.px)), 
-          overflow: .clip,
-          justifyContent: .spaceBetween,
-          backgroundColor: primaryColor,
-        ),
-        css('a', [
-          css('&').styles(
-            display: .flex,
-            height: 100.percent,
-            padding: .symmetric(horizontal: 2.em),
-            alignItems: .center,
-            color: Colors.white,
-            fontWeight: .w700,
-            textDecoration: TextDecoration(line: .none),
-          ),
-          css('&:hover').styles(
-            backgroundColor: const Color('#0005'),
-          ),
-        ]),
-        css('div.active', [
-          css('&').styles(position: .relative()),
-          css('&::before').styles(
-            content: '',
-            display: .block,
-            position: .absolute(bottom: 0.5.em, left: 20.px, right: 20.px),
-            height: 2.px,
-            radius: .circular(1.px),
-            backgroundColor: Colors.white,
-          ),
-        ])
-      ]),
+    ]),
+    css('nav', [
+      css('&').styles(
+        display: .flex,
+        width: 100.percent,
+        maxWidth: 1280.px,
+        padding: .symmetric(horizontal: 0.px, vertical: 0.px),
+        justifyContent: .spaceBetween,
+        alignItems: .center,
+      ),
+    ]),
+    css('img', [
+      css('&').styles(
+        display: .block,
+      ),
+    ]),
+    css('.nav-link', [
+      css('&').styles(
+        display: .flex,
+        position: .relative(),
+        padding: .symmetric(horizontal: 1.5.rem, vertical: 0.5.rem),
+        alignItems: .center,
+        color: const Color('#9aa0b1'),
+        fontSize: 0.95.rem,
+        fontWeight: .w600,
+        textDecoration: TextDecoration(line: .none),
+      ),
+      css('&:hover').styles(
+        color: const Color('#4cc9f0'),
+      ),
+      css('a').styles(
+        textDecoration: TextDecoration(line: .none),
+      ),
+    ]),
+    css('.nav-link.active', [
+      css('&').styles(
+        color: const Color('#4cc9f0'),
+      ),
+      css('&::after').styles(
+        content: '',
+        display: .block,
+        position: .absolute(bottom: 0.px),
+        height: 3.px,
+        backgroundColor: const Color('#4cc9f0'),
+      ),
     ]),
   ];
 }

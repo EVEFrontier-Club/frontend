@@ -5,10 +5,11 @@
 // Generated with jaspr_builder
 
 import 'package:jaspr/server.dart';
-import 'package:evefrontier_club_frontend/components/counter.dart' as _counter;
 import 'package:evefrontier_club_frontend/components/header.dart' as _header;
 import 'package:evefrontier_club_frontend/pages/about.dart' as _about;
 import 'package:evefrontier_club_frontend/pages/home.dart' as _home;
+import 'package:evefrontier_club_frontend/pages/leaderboard.dart'
+    as _leaderboard;
 import 'package:evefrontier_club_frontend/app.dart' as _app;
 
 /// Default [ServerOptions] for use with your Jaspr project.
@@ -32,11 +33,15 @@ ServerOptions get defaultServerOptions => ServerOptions(
   clients: {
     _about.About: ClientTarget<_about.About>('about'),
     _home.Home: ClientTarget<_home.Home>('home'),
+    _leaderboard.Leaderboard: ClientTarget<_leaderboard.Leaderboard>(
+      'leaderboard',
+    ),
   },
   styles: () => [
-    ..._counter.CounterState.styles,
     ..._header.Header.styles,
     ..._about.About.styles,
+    ..._home.HomeState.styles,
+    ..._leaderboard.LeaderboardState.styles,
     ..._app.App.styles,
   ],
 );
