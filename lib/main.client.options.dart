@@ -8,6 +8,8 @@ import 'package:jaspr/client.dart';
 
 import 'package:evefrontier_club_frontend/pages/about.dart' deferred as _about;
 import 'package:evefrontier_club_frontend/pages/home.dart' deferred as _home;
+import 'package:evefrontier_club_frontend/pages/leaderboard.dart'
+    deferred as _leaderboard;
 
 /// Default [ClientOptions] for use with your Jaspr project.
 ///
@@ -29,5 +31,9 @@ ClientOptions get defaultClientOptions => ClientOptions(
   clients: {
     'about': ClientLoader((p) => _about.About(), loader: _about.loadLibrary),
     'home': ClientLoader((p) => _home.Home(), loader: _home.loadLibrary),
+    'leaderboard': ClientLoader(
+      (p) => _leaderboard.Leaderboard(),
+      loader: _leaderboard.loadLibrary,
+    ),
   },
 );
