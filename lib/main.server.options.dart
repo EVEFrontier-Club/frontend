@@ -38,10 +38,10 @@ ServerOptions get defaultServerOptions => ServerOptions(
     ),
   },
   styles: () => [
+    ..._app.App.styles,
     ..._header.Header.styles,
     ..._about.About.styles,
     ..._home.HomeState.styles,
     ..._leaderboard.LeaderboardState.styles,
-    ..._app.App.styles,
   ],
 );
