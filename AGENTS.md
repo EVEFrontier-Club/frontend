@@ -33,8 +33,10 @@ dart format .
 
 `jaspr build` writes `build/jaspr/app.exe` plus a `web/` asset folder — deploy both
 together. Because `pubspec.yaml` sets `jaspr: mode: server` **with `flutter: embedded`**,
-any build image needs the Flutter SDK (`ghcr.io/cirruslabs/flutter:stable`), not just
-Dart.
+any build image needs the Flutter SDK (`ghcr.io/cirruslabs/flutter:3.44.9`), not just
+Dart. That tag is pinned, not incidental: `:stable` now resolves to a Dart the pin below
+forbids, so a floating tag breaks `flutter pub get` outright. Retiring the
+`build_web_compilers` pin and the Flutter tag is a single coupled change.
 
 `build_web_compilers` is pinned to exactly **4.4.19**. Two independent reasons, both
 hard constraints:
