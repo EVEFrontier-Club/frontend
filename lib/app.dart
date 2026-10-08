@@ -4,6 +4,7 @@ import 'package:jaspr_router/jaspr_router.dart';
 
 import 'components/header.dart';
 import 'pages/about.dart';
+import 'pages/health.dart';
 import 'pages/home.dart';
 import 'pages/leaderboard.dart';
 
@@ -26,6 +27,7 @@ class App extends StatelessComponent {
           Route(path: '/', title: 'Home', builder: (context, state) => const Home()),
           Route(path: '/leaderboard', title: 'Leaderboard', builder: (context, state) => const Leaderboard()),
           Route(path: '/about', title: 'About', builder: (context, state) => const About()),
+          Route(path: '/health', title: 'Health', builder: (context, state) => const Health()),
         ],
       ),
     ]);

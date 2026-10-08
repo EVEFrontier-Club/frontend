@@ -6,14 +6,16 @@ class TrustService {
   final String baseUrl;
   final http.Client _client = http.Client();
 
-  TrustService({this.baseUrl = 'http://localhost:8081'});
+  TrustService({
+    this.baseUrl = const String.fromEnvironment('BACKEND_URL', defaultValue: 'https://api.evefrontier.club'),
+  });
 
   /// Fetch the leaderboard of top players by trust score
   /// Returns a list of players with their trust rankings
   Future<List<PlayerTrustEntry>> getLeaderboard({int limit = 50}) async {
     try {
       final response = await _client.get(
-        Uri.parse('$baseUrl/trust/leaderboard').replace(
+        Uri.parse('$baseUrl/api/v1/trust-index/leaderboard').replace(
           queryParameters: {'limit': limit.toString()},
         ),
       );
@@ -33,7 +35,7 @@ class TrustService {
   Future<PlayerTrustScore> getPlayerTrust(String playerId) async {
     try {
       final response = await _client.get(
-        Uri.parse('$baseUrl/trust/$playerId'),
+        Uri.parse('$baseUrl/api/v1/trust-index/$playerId'),
       );
 
       if (response.statusCode == 200) {
@@ -53,7 +55,7 @@ class TrustService {
   Future<TrustExplanation> getTrustExplanation(String playerId) async {
     try {
       final response = await _client.get(
-        Uri.parse('$baseUrl/trust/explain/$playerId'),
+        Uri.parse('$baseUrl/api/v1/trust-index/explain/$playerId'),
       );
 
       if (response.statusCode == 200) {
