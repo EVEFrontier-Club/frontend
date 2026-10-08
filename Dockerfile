@@ -5,7 +5,13 @@
 # Runtime stage is a minimal Debian image with only the compiled binary and web assets.
 
 # Stage 1: Build
-FROM ghcr.io/cirruslabs/flutter:stable AS builder
+#
+# The Flutter tag is pinned deliberately, not incidentally. `build_web_compilers` is
+# pinned to exactly 4.4.19 and every `build_modules` 5.x release caps its Dart SDK
+# constraint at `<3.13.0-z`, so this package cannot resolve on a newer Flutter: `:stable`
+# (currently 3.47.6 / Dart 3.13.5) makes `flutter pub get` fail outright. Bumping the tag
+# is a coupled change that requires reviewing the pubspec.yaml pins alongside it.
+FROM ghcr.io/cirruslabs/flutter:3.44.9 AS builder
 
 WORKDIR /app
 
