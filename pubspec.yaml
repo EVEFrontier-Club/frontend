@@ -10,18 +10,21 @@ environment:
 dependencies:
   flutter:
      sdk: flutter
-  jaspr: ^0.22.4
-  jaspr_flutter_embed: ^0.4.10
-  jaspr_router: ^0.8.1
+  jaspr: ^0.23.5
+  jaspr_flutter_embed: ^0.4.11
+  jaspr_router: ^0.9.0
   http: ^1.1.0
 
 dev_dependencies:
-  build_runner: ^2.13.1
-  build_web_compilers: ^4.4.16
+  build_runner: ^2.15.1
+  # Pinned: build_web_compilers >= 4.5.0 duplicates build_modules' module_library
+  # builder, which collides with jaspr_tailwind. See dart-lang/build#4963.
+  build_web_compilers: 4.4.19
   flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
-  jaspr_builder: ^0.22.4
+  jaspr_builder: ^0.23.5
+  jaspr_lints: ^0.7.2
   jaspr_tailwind: ^0.3.6
 
 jaspr:
