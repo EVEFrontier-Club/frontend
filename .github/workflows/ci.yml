@@ -28,6 +28,9 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Check image pins
+        run: dart run tool/check_image_pins.dart
+
       - name: Analyze
         run: dart analyze
 

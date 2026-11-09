@@ -6,12 +6,22 @@
 
 # Stage 1: Build
 #
-# The Flutter tag is pinned deliberately, not incidentally. `build_web_compilers` is
-# pinned to exactly 4.4.19 and every `build_modules` 5.x release caps its Dart SDK
-# constraint at `<3.13.0-z`, so this package cannot resolve on a newer Flutter: `:stable`
-# (currently 3.47.6 / Dart 3.13.5) makes `flutter pub get` fail outright. Bumping the tag
-# is a coupled change that requires reviewing the pubspec.yaml pins alongside it.
-FROM ghcr.io/cirruslabs/flutter:3.44.9 AS builder
+# The toolchain comes from the shared, pinned image maintained in
+# `dip-develop/jaspr-build-image`. Its tag *is* the pin: Flutter 3.44.9 (Dart 3.12.2
+# bundled), `jaspr_cli 0.23.5` activated as `jaspr` on PATH, and the Tailwind v4 CLI.
+# Nothing here floats on `:stable` or `:latest`.
+#
+# Flutter is pinned deliberately, not incidentally: `build_web_compilers` is pinned
+# to exactly 4.4.19 and every `build_modules` 5.x release caps its Dart SDK
+# constraint at `<3.13.0-z`, so this package cannot resolve on a newer Flutter:
+# `:stable` (currently 3.47.6 / Dart 3.13.5) makes `flutter pub get` fail outright.
+# Bumping the tag is a coupled change that requires reviewing the pubspec.yaml pins
+# alongside it — and then republishing the shared image.
+#
+# The image is `linux/amd64` only, on purpose: Flutter publishes no linux-arm64
+# archive, so an arm64 variant would be an arm64 base carrying an x64 SDK. Build
+# this repo's image on an amd64 builder.
+FROM ghcr.io/dip-develop/jaspr-build-image:flutter-3.44.9-jaspr-0.23.5-tailwind-4.3.0 AS builder
 
 WORKDIR /app
 
@@ -25,8 +35,12 @@ RUN flutter pub get
 # Copy rest of source
 COPY . .
 
-# Build the Jaspr app (NOT build_runner build)
-RUN dart run jaspr_cli:jaspr build
+# Build the Jaspr app (NOT build_runner build).
+# `jaspr build`, not a `dart run` of the `jaspr_cli` package: the shared image
+# activates `jaspr_cli 0.23.5` and puts `jaspr` on PATH, whereas `dart run` needs
+# the package resolvable through `.dart_tool/package_config.json` — it is
+# declared in neither dependency block here, so it only resolves transitively.
+RUN jaspr build
 
 # Stage 2: Runtime
 FROM debian:bookworm-slim

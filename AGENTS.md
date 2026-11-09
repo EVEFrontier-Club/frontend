@@ -33,10 +33,11 @@ dart format .
 
 `jaspr build` writes `build/jaspr/app.exe` plus a `web/` asset folder — deploy both
 together. Because `pubspec.yaml` sets `jaspr: mode: server` **with `flutter: embedded`**,
-any build image needs the Flutter SDK (`ghcr.io/cirruslabs/flutter:3.44.9`), not just
-Dart. That tag is pinned, not incidental: `:stable` now resolves to a Dart the pin below
-forbids, so a floating tag breaks `flutter pub get` outright. Retiring the
-`build_web_compilers` pin and the Flutter tag is a single coupled change.
+any build image needs the Flutter SDK (this repo builds from the shared
+`ghcr.io/dip-develop/jaspr-build-image:flutter-3.44.9-jaspr-0.23.5-tailwind-4.3.0`), not
+just Dart. The Flutter version is pinned, not incidental: `:stable` now resolves to a Dart
+the pin below forbids, so a floating tag breaks `flutter pub get` outright. Retiring the
+`build_web_compilers` pin and the Flutter version is a single coupled change.
 
 `build_web_compilers` is pinned to exactly **4.4.19**. Two independent reasons, both
 hard constraints:
@@ -115,17 +116,22 @@ treating leaderboard output as real.
 `docker-compose.yml` here is a local full-stack convenience whose `backend` service is a
 **httpbin mock**, not the real Serverpod API.
 
-## Stale Docker/CI/deploy artifacts
+## Build is current; deploy artifacts are not
 
-Treat these as broken until fixed — they are not working references:
+`Dockerfile` and `ci.yml` describe the real build. The deploy half is unresolved —
+treat these as broken until fixed, not as working references:
 
-- `Dockerfile`: `dart:3.1`, `dart pub run build_runner build` (Jaspr needs
-  `jaspr build`), no Flutter, and `CMD ["dart", "bin/main.dart"]` when there is no
-  `bin/` directory.
-- `.github/workflows/deploy.yml`: runs `cd frontend` and uploads `frontend/build/` even
-  though the repo root *is* the frontend, installs Dart only, and uses the deprecated
-  `dart pub run build_runner build`. Intended target is rsync of build artifacts to
-  `/var/www/evefrontier-club/` then `systemctl restart evefrontier-club`.
+- `Dockerfile`: multi-stage, Flutter 3.44.9 from the shared pinned image
+  `ghcr.io/dip-develop/jaspr-build-image:flutter-3.44.9-jaspr-0.23.5-tailwind-4.3.0`
+  (the tag is chosen in `dip-develop/jaspr-build-image`), `jaspr build`, then a
+  `debian:bookworm-slim` runtime that copies `build/jaspr/app.exe` and `build/jaspr/web/`
+  and runs `./app.exe` as UID 1001. `tool/check_image_pins.dart` gates this repo's copies
+  of those pins and runs in `ci.yml`. The image is `linux/amd64` only: Flutter publishes
+  no `linux-arm64` archive.
+- `.github/workflows/deploy.yml` does not exist. `ci.yml` is the only workflow, and its
+  `Deploy to VPS` step calls `./scripts/deploy.sh`, which is not in this repo — the deploy
+  path (rsync + systemd as `.deployment/DEPLOYMENT.md` describes, or the pushed GHCR
+  image) is an open decision, not something to guess at here.
 - `.deployment/evefrontier-club.service`: `ExecStart=.../dart bin/main.dart` — same
   non-existent entrypoint.
 - `.deployment/*.md`: long-form deployment plans that disagree with the code above.
