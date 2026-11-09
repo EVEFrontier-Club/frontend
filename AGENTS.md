@@ -31,7 +31,7 @@ dart run jaspr:serve -- --port 8082       # flags go after `--`
 dart format .
 ```
 
-`jaspr build` writes `build/jaspr/app.exe` plus a `web/` asset folder — deploy both
+`jaspr build` writes `build/jaspr/app` plus a `web/` asset folder — deploy both
 together. Because `pubspec.yaml` sets `jaspr: mode: server` **with `flutter: embedded`**,
 any build image needs the Flutter SDK (this repo builds from the shared
 `ghcr.io/dip-develop/jaspr-build-image:flutter-3.44.9-jaspr-0.23.5-tailwind-4.3.0`), not
@@ -124,8 +124,8 @@ treat these as broken until fixed, not as working references:
 - `Dockerfile`: multi-stage, Flutter 3.44.9 from the shared pinned image
   `ghcr.io/dip-develop/jaspr-build-image:flutter-3.44.9-jaspr-0.23.5-tailwind-4.3.0`
   (the tag is chosen in `dip-develop/jaspr-build-image`), `jaspr build`, then a
-  `debian:bookworm-slim` runtime that copies `build/jaspr/app.exe` and `build/jaspr/web/`
-  and runs `./app.exe` as UID 1001. `tool/check_image_pins.dart` gates this repo's copies
+  `debian:bookworm-slim` runtime that copies `build/jaspr/app` and `build/jaspr/web/`
+  and runs `./app` as UID 1001. `tool/check_image_pins.dart` gates this repo's copies
   of those pins and runs in `ci.yml`. The image is `linux/amd64` only: Flutter publishes
   no `linux-arm64` archive.
 - `.github/workflows/deploy.yml` does not exist. `ci.yml` is the only workflow, and its

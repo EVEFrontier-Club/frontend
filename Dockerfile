@@ -56,8 +56,9 @@ RUN groupadd --gid 1001 appgroup \
 
 WORKDIR /app
 
-# Copy only the built artifacts (app.exe + web assets)
-COPY --from=builder /app/build/jaspr/app.exe ./
+# Copy only the built artifacts (binary + web assets). The binary is `app`: the Jaspr
+# CLI appends a `.exe` suffix only for a Windows target, and this image is Linux.
+COPY --from=builder /app/build/jaspr/app ./
 COPY --from=builder /app/build/jaspr/web ./web
 
 # Set ownership for non-root user
@@ -74,4 +75,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8080/health || exit 1
 
 # Run the compiled binary
-ENTRYPOINT ["./app.exe"]
+ENTRYPOINT ["./app"]
